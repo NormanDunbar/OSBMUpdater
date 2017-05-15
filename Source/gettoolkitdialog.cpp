@@ -1,0 +1,36 @@
+#include "gettoolkitdialog.h"
+#include "ui_gettoolkitdialog.h"
+
+getToolkitDialog::getToolkitDialog(QWidget *parent) :
+    QDialog(parent),
+    ui(new Ui::getToolkitDialog)
+{
+    ui->setupUi(this);
+}
+
+getToolkitDialog::~getToolkitDialog()
+{
+    delete ui;
+}
+
+// Called from the calling code to fetch the new
+// toolkit name. Used to update the database.
+QString getToolkitDialog::getName()
+{
+    return ui->nameEdit->text();
+}
+
+// Called from the calling code to fetch the new
+// toolkit description. Used to update the database.
+QString getToolkitDialog::getDescription()
+{
+    return ui->descriptionEdit->text();
+}
+
+// Called from the calling code to set the form caption
+// to determine if this is a new toolkit, or an amendment.
+void getToolkitDialog::setCaption(const QString &newCaption)
+{
+    // The following raises a sigSEGV!
+    //setCaption(newCaption);
+}

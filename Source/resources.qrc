@@ -1,0 +1,17 @@
+<RCC>
+    <qresource prefix="/">
+        <file>images/go-first.png</file>
+        <file>images/go-last.png</file>
+        <file>images/go-next.png</file>
+        <file>images/go-previous.png</file>
+        <file>images/list-add.png</file>
+        <file>images/list-remove.png</file>
+        <file>images/OSBM_Logo.png</file>
+        <file>images/open-database.png</file>
+        <file>images/close-database.png</file>
+        <file>images/application-exit.png</file>
+        <file>images/preferences-system.png</file>
+        <file>images/desktop-32.png</file>
+        <file>images/export.png</file>
+    </qresource>
+</RCC>
