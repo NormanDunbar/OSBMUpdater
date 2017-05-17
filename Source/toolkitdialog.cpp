@@ -122,20 +122,17 @@ void toolkitDialog::setNavButtons(int index)
     ui->prevButton->setEnabled(!firstRecord);
 
     // Delete button can't work if empty.
+    // Amend button can't work if empty.
+    // Add Button always enabled.
     int rowCount = model->rowCount();
     bool rowsPresent = (rowCount > 0);
     ui->deleteButton->setEnabled(rowsPresent);
+    ui->editButton->setEnabled(rowsPresent);
 
     // Next and last can't work if on the last row.
     bool lastRecord = (index == rowCount - 1);
     ui->lastButton->setEnabled(!lastRecord);
     ui->nextButton->setEnabled(!lastRecord);
-
-    // Commit and Rollback cant be active unless there are changes.
-    //bool isModified = model->isDirty(index);    // Hmm. Needs QT 5 for isDirty().
-    //ui->submitButton->setEnabled(isModified);
-    //ui->revertButton->setEnabled(isModified);
-
 }
 
 // Add a new (blank) row to the model, then allow the user to edit the details.
@@ -148,6 +145,8 @@ void toolkitDialog::on_addButton_clicked()
 
     if (tk) {
         tk->setCaption(qApp->tr("Add New Toolkit"));
+        tk->clearData();
+
         if (tk->exec() == QDialog::Accepted) {
             // Get the model.
             QSqlTableModel *model = qobject_cast<QSqlTableModel *>(mapper->model());
@@ -164,8 +163,9 @@ void toolkitDialog::on_addButton_clicked()
             }
         }
     } else {
-        QMessageBox::critical(this, qApp->tr("Error"), qApp->tr("Cannot create a getToolkitDialog.\n"
-                                             "Possibly out of memeory/resources?"));
+        QMessageBox::critical(this, qApp->tr("Error"),
+                                    qApp->tr("Cannot create a getToolkitDialog.\n"
+                                             "Possibly out of memory/resources?"));
         return;
     }
 
@@ -202,8 +202,8 @@ void toolkitDialog::on_buttonBox_clicked(QAbstractButton *button)
         // Commit.
         if (!model->submitAll()) {
             QMessageBox::critical(this, qApp->tr("Commit Error"),
-                                  qApp->tr("Updates have been rolled back.\n\nDatabase Error:\n") +
-                                  model->lastError().text());
+                                        qApp->tr("Updates have been rolled back.\n\nDatabase Error:\n") +
+                                        model->lastError().text());
             model->revertAll();
         }
     } else {
@@ -211,4 +211,39 @@ void toolkitDialog::on_buttonBox_clicked(QAbstractButton *button)
         model->revertAll();
     }
 
+}
+
+// Edit the highlighted Tollkit's name and/or description.
+void toolkitDialog::on_editButton_clicked()
+{
+    // Update a toolkit.
+    if (!tk) {
+        tk = new getToolkitDialog(0);
+    }
+
+    if (tk) {
+        tk->setCaption(qApp->tr("Amend Current Toolkit"));
+        tk->setData(ui->nameEdit->text(), ui->descriptionEdit->text());
+
+        if (tk->exec() == QDialog::Accepted) {
+            // Update current row.
+            ui->nameEdit->setText(tk->getName());
+            ui->descriptionEdit->setText(tk->getDescription());
+            mapper->submit();
+        }
+    } else {
+        QMessageBox::critical(this, qApp->tr("Error"),
+                                    qApp->tr("Cannot create a getToolkitDialog.\n"
+                                             "Possibly out of memory/resources?"));
+        return;
+    }
+
+
+}
+
+// Edit the highlighted Tollkit's name and/or description
+// when user double clicks in the grid.
+void toolkitDialog::on_tableView_doubleClicked(const QModelIndex &index)
+{
+    on_editButton_clicked();
 }

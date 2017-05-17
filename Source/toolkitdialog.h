@@ -7,6 +7,7 @@
 class QSqlDatabase;
 class QDataWidgetMapper;
 class QAbstractButton;
+class QModelIndex;
 
 namespace Ui {
 class toolkitDialog;
@@ -30,6 +31,10 @@ private slots:
     void on_addButton_clicked();
     void on_deleteButton_clicked();
     void on_buttonBox_clicked(QAbstractButton *button);
+
+    void on_editButton_clicked();
+
+    void on_tableView_doubleClicked(const QModelIndex &index);
 
 private:
     Ui::toolkitDialog *ui;

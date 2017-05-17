@@ -42,3 +42,11 @@ void getToolkitDialog::setData(const QString &newName, const QString &newDescrip
     ui->nameEdit->setText(newName);
     ui->descriptionEdit->setText(newDescription);
 }
+
+// Called from the calling code to set the form's data
+// when amending an existing toolkit.
+void getToolkitDialog::clearData()
+{
+    ui->nameEdit->clear();
+    ui->descriptionEdit->clear();
+}

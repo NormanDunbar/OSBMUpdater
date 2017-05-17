@@ -14,7 +14,7 @@
    <string>Get Toolkit</string>
   </property>
   <property name="windowIcon">
-   <iconset>
+   <iconset resource="resources.qrc">
     <normaloff>:/images/OSBM_Logo.png</normaloff>:/images/OSBM_Logo.png</iconset>
   </property>
   <layout class="QGridLayout" name="gridLayout">
@@ -60,7 +60,13 @@
    </item>
   </layout>
  </widget>
- <resources/>
+ <tabstops>
+  <tabstop>nameEdit</tabstop>
+  <tabstop>descriptionEdit</tabstop>
+ </tabstops>
+ <resources>
+  <include location="resources.qrc"/>
+ </resources>
  <connections>
   <connection>
    <sender>buttonBox</sender>

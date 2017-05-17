@@ -13,5 +13,6 @@
         <file>images/preferences-system.png</file>
         <file>images/desktop-32.png</file>
         <file>images/export.png</file>
+        <file>images/list-edit.png</file>
     </qresource>
 </RCC>

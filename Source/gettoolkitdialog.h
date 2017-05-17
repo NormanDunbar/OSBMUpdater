@@ -18,7 +18,7 @@ public:
     QString getDescription();
     void setCaption(const QString &newCaption);
     void setData(const QString &newName, const QString &newDescription);
-
+    void clearData();
 
 private:
     Ui::getToolkitDialog *ui;
