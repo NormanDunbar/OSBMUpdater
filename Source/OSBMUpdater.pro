@@ -15,15 +15,18 @@ TEMPLATE = app
 SOURCES += main.cpp\
         mainwindow.cpp \
     gettoolkitdialog.cpp \
-    toolkitdialog.cpp
+    toolkitdialog.cpp \
+    keyworddialog.cpp
 
 HEADERS  += mainwindow.h \
     toolkitdialog.h \
-    gettoolkitdialog.h
+    gettoolkitdialog.h \
+    keyworddialog.h
 
 FORMS    += mainwindow.ui \
     toolkitdialog.ui \
-    gettoolkitdialog.ui
+    gettoolkitdialog.ui \
+    keyworddialog.ui
 
 RESOURCES += \
     resources.qrc

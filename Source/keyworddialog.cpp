@@ -1,35 +1,30 @@
-#include "toolkitdialog.h"
-#include "ui_toolkitdialog.h"
-#include "gettoolkitdialog.h"
+#include "keyworddialog.h"
+#include "ui_keyworddialog.h"
 #include <QSqlDatabase>
 #include <QMessageBox>
-#include <QSqlTableModel>
+#include <QSqlRelationalTableModel>
+#include <QSqlRelationalDelegate>
 #include <QDataWidgetMapper>
 #include <QSqlError>
 
 
-toolkitDialog::toolkitDialog(QWidget *parent) :
+keywordDialog::keywordDialog(QWidget *parent) :
     QDialog(parent),
-    ui(new Ui::toolkitDialog)
+    ui(new Ui::keywordDialog)
 {
     ui->setupUi(this);
-    tk = NULL;
 
     mapper = new QDataWidgetMapper(this);
     mapper->setSubmitPolicy(QDataWidgetMapper::ManualSubmit);
 }
 
-toolkitDialog::~toolkitDialog()
+keywordDialog::~keywordDialog()
 {
-    if (tk) {
-        delete tk;
-    }
-
     delete ui;
 }
 
 
-QDialog::DialogCode toolkitDialog::execute(const QSqlDatabase &db) {
+QDialog::DialogCode keywordDialog::execute(const QSqlDatabase &db) {
     // Called instead of exec() to pass over the database
     // connection for use here.
     if (!db.isOpen()) {
@@ -41,32 +36,38 @@ QDialog::DialogCode toolkitDialog::execute(const QSqlDatabase &db) {
     }
 
     // Create the model and tie it to the dialog controls.
-    QSqlTableModel toolkitModel(this, db);
-    toolkitModel.setTable("toolkit");
+    QSqlRelationalTableModel keywordModel(this, db);
+    keywordModel.setTable("keyword");
 
-    toolkitModel.setHeaderData(0, Qt::Horizontal, qApp->tr("TK_ID"));
-    toolkitModel.setHeaderData(1, Qt::Horizontal, qApp->tr("TK_Code"));
-    toolkitModel.setHeaderData(2, Qt::Horizontal, qApp->tr("TK_Name"));
+    keywordModel.setHeaderData(0, Qt::Horizontal, qApp->tr("KW_ID"));
+    keywordModel.setHeaderData(1, Qt::Horizontal, qApp->tr("KW_Toolkit"));
+    keywordModel.setHeaderData(2, Qt::Horizontal, qApp->tr("KW_Name"));
+    keywordModel.setHeaderData(3, Qt::Horizontal, qApp->tr("KW_Description"));
 
     // Changes applied immediately.
-    toolkitModel.setEditStrategy(QSqlTableModel::OnManualSubmit);
-    toolkitModel.select();
+    keywordModel.setEditStrategy(QSqlTableModel::OnManualSubmit);
 
-    ui->tableView->setModel(&toolkitModel);
+    // Map the FK column to the Toolkit Name.
+    keywordModel.setRelation(1, QSqlRelation("TOOLKIT","TK_ID","TK_NAME"));
+    keywordModel.select();
+
+    ui->tableView->setModel(&keywordModel);
 
     // Make the columns fill the grid space.
     ui->tableView->horizontalHeader()->setStretchLastSection(true);
     ui->tableView->setSelectionMode(QAbstractItemView::SingleSelection);
     ui->tableView->setSelectionBehavior(QAbstractItemView::SelectRows);
 
-    // Hide the ID column as we never use it visually.
+    // Hide the ID and DESCRIPTION columns as we never use them visually.
     ui->tableView->hideColumn(0);
+    ui->tableView->hideColumn(3);
 
     // Widget mapper to link database columns to form controls.
-    mapper->setModel(&toolkitModel);
-    //mapper->setItemDelegate(new QSqlRelatonDeleget);
-    mapper->addMapping(ui->nameEdit, toolkitModel.fieldIndex("TK_CODE"));
-    mapper->addMapping(ui->descriptionEdit, toolkitModel.fieldIndex("TK_NAME"));
+    mapper->setModel(&keywordModel);
+
+    // Extract the related table for column 1 which is an FK on toolkit.tk_code.
+    mapper->addMapping(ui->toolkitEdit, keywordModel.relationModel(1)->fieldIndex("TK_CODE"));
+    mapper->addMapping(ui->keywordEdit, keywordModel.fieldIndex("KW_NAME"));
 
     // Make sure we have the correct buttons enabled.
     connect(mapper, SIGNAL(currentIndexChanged(int)), this, SLOT(setNavButtons(int)));
@@ -87,34 +88,34 @@ QDialog::DialogCode toolkitDialog::execute(const QSqlDatabase &db) {
 
 
 // Go to the first record.
-void toolkitDialog::on_firstButton_clicked()
+void keywordDialog::on_firstButton_clicked()
 {
     mapper->toFirst();
 }
 
 // Go to the previous record.
-void toolkitDialog::on_prevButton_clicked()
+void keywordDialog::on_prevButton_clicked()
 {
     mapper->toPrevious();
 }
 
 // Go to the next record.
-void toolkitDialog::on_nextButton_clicked()
+void keywordDialog::on_nextButton_clicked()
 {
     mapper->toNext();
 }
 
 // Go to the last record.
-void toolkitDialog::on_lastButton_clicked()
+void keywordDialog::on_lastButton_clicked()
 {
     mapper->toLast();
 }
 
 // Called when the mapper's index changes.
-void toolkitDialog::setNavButtons(int index)
+void keywordDialog::setNavButtons(int index)
 {
     // Get the model.
-    QSqlTableModel *model = qobject_cast<QSqlTableModel *>(mapper->model());
+    QSqlRelationalTableModel *model = qobject_cast<QSqlRelationalTableModel *>(mapper->model());
 
     // First and previous can't work if on the first row.
     bool firstRecord = (index == 0);
@@ -136,8 +137,9 @@ void toolkitDialog::setNavButtons(int index)
 }
 
 // Add a new (blank) row to the model, then allow the user to edit the details.
-void toolkitDialog::on_addButton_clicked()
+void keywordDialog::on_addButton_clicked()
 {
+/*
     // Add a new toolkit.
     if (!tk) {
         tk = new getToolkitDialog(0);
@@ -169,34 +171,35 @@ void toolkitDialog::on_addButton_clicked()
         return;
     }
 
+*/
 }
 
 // Delete the current row from the model.
-void toolkitDialog::on_deleteButton_clicked()
+void keywordDialog::on_deleteButton_clicked()
 {
     // Get the model.
-    QSqlTableModel *model = qobject_cast<QSqlTableModel *>(mapper->model());
+    QSqlRelationalTableModel *model = qobject_cast<QSqlRelationalTableModel *>(mapper->model());
     int currentRow = mapper->currentIndex();
 
     // Confirm the user's wishes.
     if (QMessageBox::question(this, qApp->tr("Are you sure?"),
-                              qApp->tr("Do you really want to delete this toolkit\n"
-                                       "plus ALL its commands, if any?"),
+                              qApp->tr("Do you really want to delete this keyword\n"
+                                       "plus ALL its syntax, examples, notes etc, if any?"),
                               QMessageBox::Yes|QMessageBox::No, QMessageBox::No) == QMessageBox::Yes) {
 
         // Remove the current row from the model.
         if (!model->removeRow(currentRow)) {
-            QMessageBox::information(this, qApp->tr("Toolkit NOT Deleted"),
+            QMessageBox::information(this, qApp->tr("Keyword NOT Deleted"),
                                      model->database().lastError().text());
         }
     }
 }
 
 // Before we exit, we need to commit or rollback all changes.
-void toolkitDialog::on_buttonBox_clicked(QAbstractButton *button)
+void keywordDialog::on_buttonBox_clicked(QAbstractButton *button)
 {
     // Get the model.
-    QSqlTableModel *model = qobject_cast<QSqlTableModel *>(mapper->model());
+    QSqlRelationalTableModel *model = qobject_cast<QSqlRelationalTableModel *>(mapper->model());
 
     if (ui->buttonBox->buttonRole(button) == QDialogButtonBox::AcceptRole) {
         // Commit.
@@ -214,8 +217,9 @@ void toolkitDialog::on_buttonBox_clicked(QAbstractButton *button)
 }
 
 // Edit the highlighted Tollkit's name and/or description.
-void toolkitDialog::on_editButton_clicked()
+void keywordDialog::on_editButton_clicked()
 {
+    /*
     // Update a toolkit.
     if (!tk) {
         tk = new getToolkitDialog(0);
@@ -237,13 +241,13 @@ void toolkitDialog::on_editButton_clicked()
                                              "Possibly out of memory/resources?"));
         return;
     }
-
-
+*/
 }
 
 // Edit the highlighted Tollkit's name and/or description
 // when user double clicks in the grid.
-void toolkitDialog::on_tableView_doubleClicked(const QModelIndex &index)
+void keywordDialog::on_tableView_doubleClicked(const QModelIndex &index)
 {
     on_editButton_clicked();
 }
+

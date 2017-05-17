@@ -1,6 +1,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "toolkitdialog.h"
+#include "keyworddialog.h"
 #include <QMessageBox>
 #include <QFileDialog>
 #include <QSqlQuery>
@@ -119,7 +120,7 @@ void MainWindow::on_buttonToolkit_clicked()
 void MainWindow::on_buttonCommand_clicked()
 {
     // Someone clicked the keywords button!
-    //keywordDialog *kw = new keywordDialog;
-    //kw->execute(db);
-    //delete kw;
+    keywordDialog *kw = new keywordDialog;
+    kw->execute(db);
+    delete kw;
 }
