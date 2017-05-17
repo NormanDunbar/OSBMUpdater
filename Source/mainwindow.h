@@ -22,6 +22,8 @@ private slots:
     void on_buttonToolkit_clicked();
     void on_buttonDatabase_clicked();
 
+    void on_buttonCommand_clicked();
+
 private:
     Ui::MainWindow *ui;
     QSqlDatabase db;

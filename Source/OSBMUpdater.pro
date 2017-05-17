@@ -14,8 +14,8 @@ TEMPLATE = app
 
 SOURCES += main.cpp\
         mainwindow.cpp \
-    toolkitdialog.cpp \
-    gettoolkitdialog.cpp
+    gettoolkitdialog.cpp \
+    toolkitdialog.cpp
 
 HEADERS  += mainwindow.h \
     toolkitdialog.h \

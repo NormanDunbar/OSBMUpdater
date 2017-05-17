@@ -13,7 +13,7 @@ namespace Ui {
 class toolkitDialog;
 }
 
-class toolkitDialog : public QDialog
+class toolkitDialog  : public QDialog
 {
     Q_OBJECT
 

@@ -14,5 +14,6 @@
         <file>images/desktop-32.png</file>
         <file>images/export.png</file>
         <file>images/list-edit.png</file>
+        <file>images/lookup.png</file>
     </qresource>
 </RCC>

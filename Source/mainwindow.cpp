@@ -115,3 +115,11 @@ void MainWindow::on_buttonToolkit_clicked()
     delete tk;
 }
 
+
+void MainWindow::on_buttonCommand_clicked()
+{
+    // Someone clicked the keywords button!
+    //keywordDialog *kw = new keywordDialog;
+    //kw->execute(db);
+    //delete kw;
+}
