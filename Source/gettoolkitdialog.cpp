@@ -31,6 +31,14 @@ QString getToolkitDialog::getDescription()
 // to determine if this is a new toolkit, or an amendment.
 void getToolkitDialog::setCaption(const QString &newCaption)
 {
-    // The following raises a sigSEGV!
-    //setCaption(newCaption);
+    setWindowTitle(newCaption);
+}
+
+
+// Called from the calling code to set the form's data
+// when amending an existing toolkit.
+void getToolkitDialog::setData(const QString &newName, const QString &newDescription)
+{
+    ui->nameEdit->setText(newName);
+    ui->descriptionEdit->setText(newDescription);
 }

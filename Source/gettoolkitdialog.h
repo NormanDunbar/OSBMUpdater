@@ -17,6 +17,7 @@ public:
     QString getName();
     QString getDescription();
     void setCaption(const QString &newCaption);
+    void setData(const QString &newName, const QString &newDescription);
 
 
 private:
