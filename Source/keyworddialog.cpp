@@ -14,12 +14,17 @@ keywordDialog::keywordDialog(QWidget *parent) :
 {
     ui->setupUi(this);
 
+    kw = NULL;
     mapper = new QDataWidgetMapper(this);
     mapper->setSubmitPolicy(QDataWidgetMapper::ManualSubmit);
 }
 
 keywordDialog::~keywordDialog()
 {
+    if (kw) {
+        delete kw;
+    }
+
     delete ui;
 }
 
@@ -55,6 +60,8 @@ QDialog::DialogCode keywordDialog::execute(const QSqlDatabase &db) {
 
     // Make the columns fill the grid space.
     ui->tableView->horizontalHeader()->setStretchLastSection(true);
+
+    // Only allow one row to be selected, and select the entire row.
     ui->tableView->setSelectionMode(QAbstractItemView::SingleSelection);
     ui->tableView->setSelectionBehavior(QAbstractItemView::SelectRows);
 
@@ -139,17 +146,16 @@ void keywordDialog::setNavButtons(int index)
 // Add a new (blank) row to the model, then allow the user to edit the details.
 void keywordDialog::on_addButton_clicked()
 {
-/*
-    // Add a new toolkit.
-    if (!tk) {
-        tk = new getToolkitDialog(0);
+    // Add a new keyword.
+    if (!kw) {
+        kw = new getKeywordDialog(0);
     }
 
-    if (tk) {
-        tk->setCaption(qApp->tr("Add New Toolkit"));
-        tk->clearData();
+    if (kw) {
+        kw->setCaption(qApp->tr("Add New Keyword"));
+        kw->clearData();
 
-        if (tk->exec() == QDialog::Accepted) {
+        if (kw->exec() == QDialog::Accepted) {
             // Get the model.
             QSqlTableModel *model = qobject_cast<QSqlTableModel *>(mapper->model());
 
@@ -159,19 +165,16 @@ void keywordDialog::on_addButton_clicked()
             // Insert after the final row.
             if (model->insertRow(rowCount)) {
                 mapper->setCurrentIndex(rowCount);
-                ui->nameEdit->setText(tk->getName());
-                ui->descriptionEdit->setText(tk->getDescription());
+                ui->keywordEdit->setText(kw->getKeyword());
                 mapper->submit();
             }
         }
     } else {
         QMessageBox::critical(this, qApp->tr("Error"),
-                                    qApp->tr("Cannot create a getToolkitDialog.\n"
+                                    qApp->tr("Cannot create a getKeywordDialog.\n"
                                              "Possibly out of memory/resources?"));
         return;
     }
-
-*/
 }
 
 // Delete the current row from the model.

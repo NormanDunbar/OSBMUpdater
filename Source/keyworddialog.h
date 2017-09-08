@@ -2,6 +2,7 @@
 #define KEYWORDDIALOG_H
 
 #include <QDialog>
+#include "getkeyworddialog.h"
 
 class QSqlDatabase;
 class QDataWidgetMapper;
@@ -38,6 +39,7 @@ private slots:
 private:
     Ui::keywordDialog *ui;
     QDataWidgetMapper *mapper;
+    getKeywordDialog *kw;
 };
 
 

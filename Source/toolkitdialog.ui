@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>keywordDialog</class>
- <widget class="QDialog" name="keywordDialog">
+ <class>toolkitDialog</class>
+ <widget class="QDialog" name="toolkitDialog">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -277,7 +277,7 @@
   <connection>
    <sender>buttonBox</sender>
    <signal>accepted()</signal>
-   <receiver>keywordDialog</receiver>
+   <receiver>toolkitDialog</receiver>
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -293,7 +293,7 @@
   <connection>
    <sender>buttonBox</sender>
    <signal>rejected()</signal>
-   <receiver>keywordDialog</receiver>
+   <receiver>toolkitDialog</receiver>
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">

@@ -26,7 +26,7 @@
    <string>OSBM Updater</string>
   </property>
   <property name="windowIcon">
-   <iconset>
+   <iconset resource="resources.qrc">
     <normaloff>:/images/OSBM_Logo.png</normaloff>:/images/OSBM_Logo.png</iconset>
   </property>
   <widget class="QWidget" name="centralWidget">
@@ -81,10 +81,10 @@
        <string>Maintain toolkit commands</string>
       </property>
       <property name="text">
-       <string>&amp;Commands</string>
+       <string>&amp;Keywords</string>
       </property>
       <property name="icon">
-       <iconset>
+       <iconset resource="resources.qrc">
         <normaloff>:/images/desktop-32.png</normaloff>:/images/desktop-32.png</iconset>
       </property>
       <property name="iconSize">
@@ -119,7 +119,7 @@
        <string>&amp;Toolkits</string>
       </property>
       <property name="icon">
-       <iconset>
+       <iconset resource="resources.qrc">
         <normaloff>:/images/preferences-system.png</normaloff>:/images/preferences-system.png</iconset>
       </property>
       <property name="iconSize">
@@ -193,7 +193,9 @@
   </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
- <resources/>
+ <resources>
+  <include location="resources.qrc"/>
+ </resources>
  <connections>
   <connection>
    <sender>actionE_xit</sender>

@@ -16,17 +16,20 @@ SOURCES += main.cpp\
         mainwindow.cpp \
     gettoolkitdialog.cpp \
     toolkitdialog.cpp \
-    keyworddialog.cpp
+    keyworddialog.cpp \
+    getkeyworddialog.cpp
 
 HEADERS  += mainwindow.h \
     toolkitdialog.h \
     gettoolkitdialog.h \
-    keyworddialog.h
+    keyworddialog.h \
+    getkeyworddialog.h
 
 FORMS    += mainwindow.ui \
     toolkitdialog.ui \
     gettoolkitdialog.ui \
-    keyworddialog.ui
+    keyworddialog.ui \
+    getkeyworddialog.ui
 
 RESOURCES += \
     resources.qrc
